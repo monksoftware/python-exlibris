@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from __future__ import unicode_literals
 import hashlib
 import hmac
@@ -5,6 +6,8 @@ import time
 import uuid
 
 import requests
+
+from . import exceptions
 
 
 class ExlibrisClient():
@@ -43,8 +46,26 @@ class ExlibrisClient():
             method, url, params=all_query_params, data=body_data)
 
     def get_features(self):
-        return self._send_request('GET', self.start_url)
+        return self._send_request('GET', self.start_url).json()
 
     def buy_ebook(self, isbn, buyer_transaction_id, customer_name, price,
                   customer_email=None, message=None):
-        request = requests.Request('POST', self.api_url)
+        data = {
+            'isbn': isbn,
+            'buyer_transaction_id': buyer_transaction_id,
+            'customer_name': customer_name,
+            'price': price,
+        }
+        if customer_email:
+            data['customer_email'] = customer_email
+        if message:
+            data['message'] = message
+        response = self._send_request(
+            'POST', self.endpoints['transactions'], body_data=data)
+        # it seems like if an invalid ISBN is supplied, exlibris
+        # returns 400 without any error message
+        if response.status_code == 400:
+            raise exceptions.BookPurchaseError(response=response)
+        if not response.ok:
+            raise requests.HTTPError
+        return response.json()
