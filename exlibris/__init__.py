@@ -17,7 +17,9 @@ class ExlibrisClient():
         self.endpoints = self.get_features()
 
     def _build_message_to_sign(self, **data):
-        return '&'.join('{}={}'.format(k, v) for k, v in sorted(data.items()))
+        return (
+            ''.join('{}{}'.format(k, v) for k, v in sorted(data.items()))
+            .encode('utf-8'))
 
     def _send_request(self, method, url, query_params=None, body_data=None):
         if query_params is None:
