@@ -49,7 +49,7 @@ class ExlibrisClient():
         return self._send_request('GET', self.start_url).json()
 
     def buy_ebook(self, isbn, buyer_transaction_id, customer_name, price,
-                  customer_email=None, message=None):
+                  customer_email=None, message=None,tags=None):
         data = {
             'isbn': isbn,
             'buyer_transaction_id': buyer_transaction_id,
@@ -60,6 +60,9 @@ class ExlibrisClient():
             data['customer_email'] = customer_email
         if message:
             data['message'] = message
+        if tags:
+            data['tags'] = tags
+
         response = self._send_request(
             'POST', self.endpoints['transactions'], body_data=data)
         # it seems like if an invalid ISBN is supplied, exlibris
