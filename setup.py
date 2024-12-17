@@ -7,7 +7,7 @@ PACKAGE_NAME = 'exlibris'
 
 setup(
     name='python-exlibris',
-    version='0.1.0',
+    version='0.1.1',
     description='Python client for the bookrepublic exlibris API',
     url='https://github.com/monksoftware/python-exlibris',
     author='Leonardo Donelli',

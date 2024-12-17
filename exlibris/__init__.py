@@ -15,7 +15,7 @@ class ExlibrisClient():
     def __init__(self, key, secret):
         self.key = key
         self.secret = secret
-        self.start_url = 'https://exlibris.bookrepublic.it/api/{}/'.format(
+        self.start_url = 'https://os.bookwire.de/rw/brit/{}/'.format(
             self.key)
         self.endpoints = self.get_features()
 
